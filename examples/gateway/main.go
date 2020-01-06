@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/golang/glog"
-	gwruntime "github.com/grpc-ecosystem/grpc-gateway/runtime"
+	gwruntime "github.com/jslyzt/grpc-gateway/runtime"
 )
 
 // Endpoint describes a gRPC endpoint
@@ -15,22 +15,13 @@ type Endpoint struct {
 
 // Options is a set of options to be passed to Run
 type Options struct {
-	// Addr is the address to listen
-	Addr string
-
-	// GRPCServer defines an endpoint of a gRPC service
-	GRPCServer Endpoint
-
-	// SwaggerDir is a path to a directory from which the server
-	// serves swagger specs.
-	SwaggerDir string
-
-	// Mux is a list of options to be passed to the grpc-gateway multiplexer
-	Mux []gwruntime.ServeMuxOption
+	Addr       string                     // the address to listen
+	GRPCServer Endpoint                   // defines an endpoint of a gRPC service
+	SwaggerDir string                     // a path to a directory from which the server serves swagger specs.
+	Mux        []gwruntime.ServeMuxOption // a list of options to be passed to the grpc-gateway multiplexer
 }
 
-// Run starts a HTTP server and blocks while running if successful.
-// The server will be shutdown when "ctx" is canceled.
+// Run starts a HTTP server and blocks while running if successful. The server will be shutdown when "ctx" is canceled.
 func Run(ctx context.Context, opts Options) error {
 	ctx, cancel := context.WithCancel(ctx)
 	defer cancel()

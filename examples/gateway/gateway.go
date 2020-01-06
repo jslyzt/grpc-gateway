@@ -7,8 +7,8 @@ import (
 	"net/http"
 	"time"
 
-	"github.com/grpc-ecosystem/grpc-gateway/examples/proto/examplepb"
-	gwruntime "github.com/grpc-ecosystem/grpc-gateway/runtime"
+	"github.com/jslyzt/grpc-gateway/examples/proto/examplepb"
+	gwruntime "github.com/jslyzt/grpc-gateway/runtime"
 	"google.golang.org/grpc"
 )
 
@@ -43,14 +43,12 @@ func dial(ctx context.Context, network, addr string) (*grpc.ClientConn, error) {
 	}
 }
 
-// dialTCP creates a client connection via TCP.
-// "addr" must be a valid TCP address with a port number.
+// dialTCP creates a client connection via TCP. "addr" must be a valid TCP address with a port number.
 func dialTCP(ctx context.Context, addr string) (*grpc.ClientConn, error) {
 	return grpc.DialContext(ctx, addr, grpc.WithInsecure())
 }
 
-// dialUnix creates a client connection via a unix domain socket.
-// "addr" must be a valid path to the socket.
+// dialUnix creates a client connection via a unix domain socket. "addr" must be a valid path to the socket.
 func dialUnix(ctx context.Context, addr string) (*grpc.ClientConn, error) {
 	d := func(addr string, timeout time.Duration) (net.Conn, error) {
 		return net.DialTimeout("unix", addr, timeout)

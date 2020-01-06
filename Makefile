@@ -1,8 +1,3 @@
-# This is a Makefile which maintains files automatically generated but to be
-# shipped together with other files.
-# You don't have to rebuild these targets by yourself unless you develop
-# grpc-gateway itself.
-
 GO_PLUGIN=bin/protoc-gen-go
 GO_PROTOBUF_REPO=github.com/golang/protobuf
 GO_PLUGIN_PKG=$(GO_PROTOBUF_REPO)/protoc-gen-go
@@ -50,7 +45,7 @@ RUNTIME_GO=$(RUNTIME_PROTO:.proto=.pb.go)
 OPENAPIV2_PROTO=protoc-gen-swagger/options/openapiv2.proto protoc-gen-swagger/options/annotations.proto
 OPENAPIV2_GO=$(OPENAPIV2_PROTO:.proto=.pb.go)
 
-PKGMAP=Mgoogle/protobuf/field_mask.proto=google.golang.org/genproto/protobuf/field_mask,Mgoogle/protobuf/descriptor.proto=$(GO_PLUGIN_PKG)/descriptor,Mexamples/proto/sub/message.proto=github.com/grpc-ecosystem/grpc-gateway/examples/proto/sub
+PKGMAP=Mgoogle/protobuf/field_mask.proto=google.golang.org/genproto/protobuf/field_mask,Mgoogle/protobuf/descriptor.proto=$(GO_PLUGIN_PKG)/descriptor,Mexamples/proto/sub/message.proto=github.com/jslyzt/grpc-gateway/examples/proto/sub
 ADDITIONAL_GW_FLAGS=
 ifneq "$(GATEWAY_PLUGIN_FLAGS)" ""
 	ADDITIONAL_GW_FLAGS=,$(GATEWAY_PLUGIN_FLAGS)
@@ -131,6 +126,8 @@ SWAGGER_CODEGEN=swagger-codegen
 
 PROTOC_INC_PATH=$(dir $(shell which protoc))/../include
 
+.PHONY: generate examples test lint clean distclean realclean
+
 generate: $(RUNTIME_GO)
 
 .SUFFIXES: .go .proto
@@ -187,23 +184,11 @@ $(RESPONSE_BODY_EXAMPLE_SRCS): $(RESPONSE_BODY_EXAMPLE_SPEC)
 		$(EXAMPLE_CLIENT_DIR)/responsebody/git_push.sh
 
 examples: $(EXAMPLE_DEPSRCS) $(EXAMPLE_SVCSRCS) $(EXAMPLE_GWSRCS) $(EXAMPLE_SWAGGERSRCS) $(EXAMPLE_CLIENT_SRCS)
+
 test: examples
 	go test -short -race ./...
 	go test -race ./examples/integration -args -network=unix -endpoint=test.sock
-changelog:
-	docker run --rm \
-		--interactive \
-		--tty \
-		-e "CHANGELOG_GITHUB_TOKEN=${CHANGELOG_GITHUB_TOKEN}" \
-		-v "$(PWD):/usr/local/src/your-app" \
-		ferrarimarco/github-changelog-generator:1.14.3 \
-				-u grpc-ecosystem \
-				-p grpc-gateway \
-				--author \
-				--compare-link \
-				--github-site=https://github.com \
-				--unreleased-label "**Next release**" \
-				--future-release=v1.12.1
+
 lint:
 	golint --set_exit_status ./runtime
 	golint --set_exit_status ./utilities/...
@@ -216,13 +201,13 @@ lint:
 
 clean:
 	rm -f $(GATEWAY_PLUGIN) $(SWAGGER_PLUGIN)
+
 distclean: clean
 	rm -f $(GO_PLUGIN)
+
 realclean: distclean
 	rm -f $(EXAMPLE_SVCSRCS) $(EXAMPLE_DEPSRCS)
 	rm -f $(EXAMPLE_GWSRCS)
 	rm -f $(EXAMPLE_SWAGGERSRCS)
 	rm -f $(EXAMPLE_CLIENT_SRCS)
 	rm -f $(OPENAPIV2_GO)
-
-.PHONY: generate examples test lint clean distclean realclean

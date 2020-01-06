@@ -9,9 +9,9 @@ import (
 	"github.com/golang/glog"
 	"github.com/golang/protobuf/proto"
 	plugin "github.com/golang/protobuf/protoc-gen-go/plugin"
-	"github.com/grpc-ecosystem/grpc-gateway/codegenerator"
-	"github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway/descriptor"
-	"github.com/grpc-ecosystem/grpc-gateway/protoc-gen-swagger/genswagger"
+	"github.com/jslyzt/grpc-gateway/codegenerator"
+	"github.com/jslyzt/grpc-gateway/protoc-gen-grpc-gateway/descriptor"
+	"github.com/jslyzt/grpc-gateway/protoc-gen-swagger/genswagger"
 )
 
 var (

@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/protobuf/protoc-gen-go/descriptor"
 	gogen "github.com/golang/protobuf/protoc-gen-go/generator"
-	"github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway/httprule"
+	"github.com/jslyzt/grpc-gateway/protoc-gen-grpc-gateway/httprule"
 )
 
 // IsWellKnownType returns true if the provided fully qualified type name is considered 'well-known'.
@@ -17,12 +17,9 @@ func IsWellKnownType(typeName string) bool {
 
 // GoPackage represents a golang package
 type GoPackage struct {
-	// Path is the package path to the package.
-	Path string
-	// Name is the package name of the package
-	Name string
-	// Alias is an alias of the package unique within the current invokation of grpc-gateway generator.
-	Alias string
+	Path  string // the package path to the package.
+	Name  string // the package name of the package
+	Alias string // an alias of the package unique within the current invokation of grpc-gateway generator
 }
 
 // Standard returns whether the import is a golang standard package.
@@ -41,14 +38,10 @@ func (p GoPackage) String() string {
 // File wraps descriptor.FileDescriptorProto for richer features.
 type File struct {
 	*descriptor.FileDescriptorProto
-	// GoPkg is the go package of the go file generated from this file..
-	GoPkg GoPackage
-	// Messages is the list of messages defined in this file.
-	Messages []*Message
-	// Enums is the list of enums defined in this file.
-	Enums []*Enum
-	// Services is the list of services defined in this file.
-	Services []*Service
+	GoPkg    GoPackage  // the go package of the go file generated from this file..
+	Messages []*Message // the list of messages defined in this file.
+	Enums    []*Enum    // the list of enums defined in this file.
+	Services []*Service // the list of services defined in this file.
 }
 
 // proto2 determines if the syntax of the file is proto2.
@@ -58,15 +51,11 @@ func (f *File) proto2() bool {
 
 // Message describes a protocol buffer message types
 type Message struct {
-	// File is the file where the message is defined
-	File *File
-	// Outers is a list of outer messages if this message is a nested type.
-	Outers []string
+	File   *File    // the file where the message is defined
+	Outers []string // a list of outer messages if this message is a nested type.
 	*descriptor.DescriptorProto
 	Fields []*Field
-
-	// Index is proto path index of this message in File.
-	Index int
+	Index  int // proto path index of this message in File.
 }
 
 // FQMN returns a fully qualified message name of this message.
@@ -81,8 +70,7 @@ func (m *Message) FQMN() string {
 }
 
 // GoType returns a go type name for the message type.
-// It prefixes the type name with the package alias if
-// its belonging package is not "currentPackage".
+// It prefixes the type name with the package alias if its belonging package is not "currentPackage".
 func (m *Message) GoType(currentPackage string) string {
 	var components []string
 	components = append(components, m.Outers...)
@@ -101,12 +89,9 @@ func (m *Message) GoType(currentPackage string) string {
 
 // Enum describes a protocol buffer enum types
 type Enum struct {
-	// File is the file where the enum is defined
-	File *File
-	// Outers is a list of outer messages if this enum is a nested type.
-	Outers []string
+	File   *File    // the file where the enum is defined
+	Outers []string // a list of outer messages if this enum is a nested type.
 	*descriptor.EnumDescriptorProto
-
 	Index int
 }
 
@@ -122,8 +107,7 @@ func (e *Enum) FQEN() string {
 }
 
 // GoType returns a go type name for the enum type.
-// It prefixes the type name with the package alias if
-// its belonging package is not "currentPackage".
+// It prefixes the type name with the package alias if its belonging package is not "currentPackage".
 func (e *Enum) GoType(currentPackage string) string {
 	var components []string
 	components = append(components, e.Outers...)
@@ -142,11 +126,9 @@ func (e *Enum) GoType(currentPackage string) string {
 
 // Service wraps descriptor.ServiceDescriptorProto for richer features.
 type Service struct {
-	// File is the file where this service is defined.
-	File *File
+	File *File // the file where this service is defined
 	*descriptor.ServiceDescriptorProto
-	// Methods is the list of methods defined in this service.
-	Methods []*Method
+	Methods []*Method // the list of methods defined in this service.
 }
 
 // FQSN returns the fully qualified service name of this service.
@@ -161,14 +143,10 @@ func (s *Service) FQSN() string {
 
 // Method wraps descriptor.MethodDescriptorProto for richer features.
 type Method struct {
-	// Service is the service which this method belongs to.
-	Service *Service
+	Service *Service // the service which this method belongs to
 	*descriptor.MethodDescriptorProto
-
-	// RequestType is the message type of requests to this method.
-	RequestType *Message
-	// ResponseType is the message type of responses from this method.
-	ResponseType *Message
+	RequestType  *Message // the message type of requests to this method
+	ResponseType *Message // the message type of responses from this method
 	Bindings     []*Binding
 }
 
@@ -182,20 +160,13 @@ func (m *Method) FQMN() string {
 
 // Binding describes how an HTTP endpoint is bound to a gRPC method.
 type Binding struct {
-	// Method is the method which the endpoint is bound to.
-	Method *Method
-	// Index is a zero-origin index of the binding in the target method
-	Index int
-	// PathTmpl is path template where this method is mapped to.
-	PathTmpl httprule.Template
-	// HTTPMethod is the HTTP method which this method is mapped to.
-	HTTPMethod string
-	// PathParams is the list of parameters provided in HTTP request paths.
-	PathParams []Parameter
-	// Body describes parameters provided in HTTP request body.
-	Body *Body
-	// ResponseBody describes field in response struct to marshal in HTTP response body.
-	ResponseBody *Body
+	Method       *Method           // the method which the endpoint is bound to
+	Index        int               // a zero-origin index of the binding in the target method
+	PathTmpl     httprule.Template // path template where this method is mapped to
+	HTTPMethod   string            // the HTTP method which this method is mapped to
+	PathParams   []Parameter       // the list of parameters provided in HTTP request paths
+	Body         *Body             // describes parameters provided in HTTP request body
+	ResponseBody *Body             // describes field in response struct to marshal in HTTP response body
 }
 
 // ExplicitParams returns a list of explicitly bound parameters of "b",
@@ -213,21 +184,16 @@ func (b *Binding) ExplicitParams() []string {
 
 // Field wraps descriptor.FieldDescriptorProto for richer features.
 type Field struct {
-	// Message is the message type which this field belongs to.
-	Message *Message
-	// FieldMessage is the message type of the field.
-	FieldMessage *Message
+	Message      *Message // the message type which this field belongs to
+	FieldMessage *Message // the message type of the field
 	*descriptor.FieldDescriptorProto
 }
 
 // Parameter is a parameter provided in http requests
 type Parameter struct {
-	// FieldPath is a path to a proto field which this parameter is mapped to.
-	FieldPath
-	// Target is the proto field which this parameter is mapped to.
-	Target *Field
-	// Method is the method which this parameter is used for.
-	Method *Method
+	FieldPath         // a path to a proto field which this parameter is mapped to
+	Target    *Field  // the proto field which this parameter is mapped to
+	Method    *Method // the method which this parameter is used for
 }
 
 // ConvertFuncExpr returns a go expression of a converter function.
@@ -270,9 +236,7 @@ func (p Parameter) IsProto2() bool {
 // Body describes a http (request|response) body to be sent to the (method|client).
 // This is used in body and response_body options in google.api.HttpRule
 type Body struct {
-	// FieldPath is a path to a proto field which the (request|response) body is mapped to.
-	// The (request|response) body is mapped to the (request|response) type itself if FieldPath is empty.
-	FieldPath FieldPath
+	FieldPath FieldPath // a path to a proto field which the (request|response) body is mapped to.
 }
 
 // AssignableExpr returns an assignable expression in Go to be used to initialize method request object.
@@ -343,11 +307,8 @@ func (p FieldPath) AssignableExpr(msgExpr string) string {
 
 // FieldPathComponent is a path component in FieldPath
 type FieldPathComponent struct {
-	// Name is a name of the proto field which this component corresponds to.
-	// TODO(yugui) is this necessary?
-	Name string
-	// Target is the proto field which this component corresponds to.
-	Target *Field
+	Name   string // a name of the proto field which this component corresponds to.
+	Target *Field // the proto field which this component corresponds to.
 }
 
 // AssignableExpr returns an assignable expression in go for this field.

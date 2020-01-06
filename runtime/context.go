@@ -17,23 +17,25 @@ import (
 	"google.golang.org/grpc/status"
 )
 
-// MetadataHeaderPrefix is the http prefix that represents custom metadata
-// parameters to or from a gRPC call.
-const MetadataHeaderPrefix = "Grpc-Metadata-"
+const (
+	// MetadataHeaderPrefix is the http prefix that represents custom metadata
+	// parameters to or from a gRPC call.
+	MetadataHeaderPrefix = "Grpc-Metadata-"
 
-// MetadataPrefix is prepended to permanent HTTP header keys (as specified
-// by the IANA) when added to the gRPC context.
-const MetadataPrefix = "grpcgateway-"
+	// MetadataPrefix is prepended to permanent HTTP header keys (as specified
+	// by the IANA) when added to the gRPC context.
+	MetadataPrefix = "grpcgateway-"
 
-// MetadataTrailerPrefix is prepended to gRPC metadata as it is converted to
-// HTTP headers in a response handled by grpc-gateway
-const MetadataTrailerPrefix = "Grpc-Trailer-"
+	// MetadataTrailerPrefix is prepended to gRPC metadata as it is converted to
+	// HTTP headers in a response handled by grpc-gateway
+	MetadataTrailerPrefix = "Grpc-Trailer-"
 
-const metadataGrpcTimeout = "Grpc-Timeout"
-const metadataHeaderBinarySuffix = "-Bin"
+	metadataGrpcTimeout        = "Grpc-Timeout"
+	metadataHeaderBinarySuffix = "-Bin"
 
-const xForwardedFor = "X-Forwarded-For"
-const xForwardedHost = "X-Forwarded-Host"
+	xForwardedFor  = "X-Forwarded-For"
+	xForwardedHost = "X-Forwarded-Host"
+)
 
 var (
 	// DefaultContextTimeout is used for gRPC call context.WithTimeout whenever a Grpc-Timeout inbound
@@ -200,8 +202,7 @@ func timeoutUnitToDuration(u uint8) (d time.Duration, ok bool) {
 	return
 }
 
-// isPermanentHTTPHeader checks whether hdr belongs to the list of
-// permenant request headers maintained by IANA.
+// isPermanentHTTPHeader checks whether hdr belongs to the list of permenant request headers maintained by IANA.
 // http://www.iana.org/assignments/message-headers/message-headers.xml
 func isPermanentHTTPHeader(hdr string) bool {
 	switch hdr {

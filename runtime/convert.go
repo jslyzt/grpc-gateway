@@ -12,14 +12,12 @@ import (
 	"github.com/golang/protobuf/ptypes/wrappers"
 )
 
-// String just returns the given string.
-// It is just for compatibility to other types.
+// String just returns the given string. It is just for compatibility to other types.
 func String(val string) (string, error) {
 	return val, nil
 }
 
-// StringSlice converts 'val' where individual strings are separated by
-// 'sep' into a string slice.
+// StringSlice converts 'val' where individual strings are separated by 'sep' into a string slice.
 func StringSlice(val, sep string) ([]string, error) {
 	return strings.Split(val, sep), nil
 }
@@ -29,8 +27,7 @@ func Bool(val string) (bool, error) {
 	return strconv.ParseBool(val)
 }
 
-// BoolSlice converts 'val' where individual booleans are separated by
-// 'sep' into a bool slice.
+// BoolSlice converts 'val' where individual booleans are separated by 'sep' into a bool slice.
 func BoolSlice(val, sep string) ([]bool, error) {
 	s := strings.Split(val, sep)
 	values := make([]bool, len(s))
@@ -49,8 +46,7 @@ func Float64(val string) (float64, error) {
 	return strconv.ParseFloat(val, 64)
 }
 
-// Float64Slice converts 'val' where individual floating point numbers are separated by
-// 'sep' into a float64 slice.
+// Float64Slice converts 'val' where individual floating point numbers are separated by 'sep' into a float64 slice.
 func Float64Slice(val, sep string) ([]float64, error) {
 	s := strings.Split(val, sep)
 	values := make([]float64, len(s))
@@ -73,8 +69,7 @@ func Float32(val string) (float32, error) {
 	return float32(f), nil
 }
 
-// Float32Slice converts 'val' where individual floating point numbers are separated by
-// 'sep' into a float32 slice.
+// Float32Slice converts 'val' where individual floating point numbers are separated by 'sep' into a float32 slice.
 func Float32Slice(val, sep string) ([]float32, error) {
 	s := strings.Split(val, sep)
 	values := make([]float32, len(s))
@@ -93,8 +88,7 @@ func Int64(val string) (int64, error) {
 	return strconv.ParseInt(val, 0, 64)
 }
 
-// Int64Slice converts 'val' where individual integers are separated by
-// 'sep' into a int64 slice.
+// Int64Slice converts 'val' where individual integers are separated by 'sep' into a int64 slice.
 func Int64Slice(val, sep string) ([]int64, error) {
 	s := strings.Split(val, sep)
 	values := make([]int64, len(s))
@@ -117,8 +111,7 @@ func Int32(val string) (int32, error) {
 	return int32(i), nil
 }
 
-// Int32Slice converts 'val' where individual integers are separated by
-// 'sep' into a int32 slice.
+// Int32Slice converts 'val' where individual integers are separated by 'sep' into a int32 slice.
 func Int32Slice(val, sep string) ([]int32, error) {
 	s := strings.Split(val, sep)
 	values := make([]int32, len(s))
@@ -137,8 +130,7 @@ func Uint64(val string) (uint64, error) {
 	return strconv.ParseUint(val, 0, 64)
 }
 
-// Uint64Slice converts 'val' where individual integers are separated by
-// 'sep' into a uint64 slice.
+// Uint64Slice converts 'val' where individual integers are separated by 'sep' into a uint64 slice.
 func Uint64Slice(val, sep string) ([]uint64, error) {
 	s := strings.Split(val, sep)
 	values := make([]uint64, len(s))
@@ -161,8 +153,7 @@ func Uint32(val string) (uint32, error) {
 	return uint32(i), nil
 }
 
-// Uint32Slice converts 'val' where individual integers are separated by
-// 'sep' into a uint32 slice.
+// Uint32Slice converts 'val' where individual integers are separated by 'sep' into a uint32 slice.
 func Uint32Slice(val, sep string) ([]uint32, error) {
 	s := strings.Split(val, sep)
 	values := make([]uint32, len(s))
@@ -224,8 +215,7 @@ func Duration(val string) (*duration.Duration, error) {
 	return &r, nil
 }
 
-// Enum converts the given string into an int32 that should be type casted into the
-// correct enum proto type.
+// Enum converts the given string into an int32 that should be type casted into the correct enum proto type.
 func Enum(val string, enumValMap map[string]int32) (int32, error) {
 	e, ok := enumValMap[val]
 	if ok {
@@ -245,8 +235,7 @@ func Enum(val string, enumValMap map[string]int32) (int32, error) {
 }
 
 // EnumSlice converts 'val' where individual enums are separated by 'sep'
-// into a int32 slice. Each individual int32 should be type casted into the
-// correct enum proto type.
+// into a int32 slice. Each individual int32 should be type casted into the correct enum proto type.
 func EnumSlice(val, sep string, enumValMap map[string]int32) ([]int32, error) {
 	s := strings.Split(val, sep)
 	values := make([]int32, len(s))

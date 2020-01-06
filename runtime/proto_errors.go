@@ -6,7 +6,7 @@ import (
 	"net/http"
 
 	"github.com/golang/protobuf/ptypes/any"
-	"github.com/grpc-ecosystem/grpc-gateway/internal"
+	"github.com/jslyzt/grpc-gateway/internal"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/grpclog"
 	"google.golang.org/grpc/status"
@@ -28,9 +28,7 @@ var _ ProtoErrorHandlerFunc = DefaultHTTPProtoErrorHandler
 // DefaultHTTPProtoErrorHandler is an implementation of HTTPError.
 // If "err" is an error from gRPC system, the function replies with the status code mapped by HTTPStatusFromCode.
 // If otherwise, it replies with http.StatusInternalServerError.
-//
 // The response body returned by this function is a Status message marshaled by a Marshaler.
-//
 // Do not set this function to HTTPError variable directly, use WithProtoErrorHandler option instead.
 func DefaultHTTPProtoErrorHandler(ctx context.Context, mux *ServeMux, marshaler Marshaler, w http.ResponseWriter, _ *http.Request, err error) {
 	// return Internal when Marshal failed
@@ -79,9 +77,7 @@ func DefaultHTTPProtoErrorHandler(ctx context.Context, mux *ServeMux, marshaler 
 	handleForwardResponseTrailer(w, md)
 }
 
-// DefaultHTTPStreamErrorHandler converts the given err into a *StreamError via
-// default logic.
-//
+// DefaultHTTPStreamErrorHandler converts the given err into a *StreamError via default logic.
 // It extracts the gRPC status from err if possible. The fields of the status are
 // used to populate the returned StreamError, and the HTTP status code is derived
 // from the gRPC code via HTTPStatusFromCode. If the given err does not contain a

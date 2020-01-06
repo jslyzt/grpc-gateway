@@ -9,8 +9,8 @@ import (
 
 	"github.com/golang/glog"
 	generator2 "github.com/golang/protobuf/protoc-gen-go/generator"
-	"github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway/descriptor"
-	"github.com/grpc-ecosystem/grpc-gateway/utilities"
+	"github.com/jslyzt/grpc-gateway/protoc-gen-grpc-gateway/descriptor"
+	"github.com/jslyzt/grpc-gateway/utilities"
 )
 
 type param struct {
@@ -44,7 +44,6 @@ func (b binding) GetBodyFieldStructName() (string, error) {
 }
 
 // HasQueryParam determines if the binding needs parameters in query string.
-//
 // It sometimes returns true even though actually the binding does not need.
 // But it is not serious because it just results in a small amount of extra codes generated.
 func (b binding) HasQueryParam() bool {
@@ -88,8 +87,7 @@ func (b binding) HasRepeatedEnumPathParam() bool {
 }
 
 // hasEnumPathParam returns true if the path parameter slice contains a parameter
-// that maps to a enum proto field and that the enum proto field is or isn't repeated
-// based on the provided 'repeated' parameter.
+// that maps to a enum proto field and that the enum proto field is or isn't repeated based on the provided 'repeated' parameter.
 func (b binding) hasEnumPathParam(repeated bool) bool {
 	for _, p := range b.PathParams {
 		if p.IsEnum() && p.IsRepeated() == repeated {

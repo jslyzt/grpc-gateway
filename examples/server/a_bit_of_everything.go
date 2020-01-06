@@ -10,9 +10,9 @@ import (
 	"github.com/golang/protobuf/proto"
 	"github.com/golang/protobuf/ptypes/duration"
 	"github.com/golang/protobuf/ptypes/empty"
-	examples "github.com/grpc-ecosystem/grpc-gateway/examples/proto/examplepb"
-	"github.com/grpc-ecosystem/grpc-gateway/examples/proto/sub"
-	"github.com/grpc-ecosystem/grpc-gateway/examples/proto/sub2"
+	examples "github.com/jslyzt/grpc-gateway/examples/proto/examplepb"
+	"github.com/jslyzt/grpc-gateway/examples/proto/sub"
+	"github.com/jslyzt/grpc-gateway/examples/proto/sub2"
 	"github.com/rogpeppe/fastuuid"
 	"google.golang.org/genproto/googleapis/rpc/errdetails"
 	"google.golang.org/grpc"
@@ -23,13 +23,16 @@ import (
 
 // Implements of ABitOfEverythingServiceServer
 
-var uuidgen = fastuuid.MustNewGenerator()
+var (
+	uuidgen = fastuuid.MustNewGenerator()
+)
 
 type _ABitOfEverythingServer struct {
 	v map[string]*examples.ABitOfEverything
 	m sync.Mutex
 }
 
+// ABitOfEverythingServer a bit of everything服务
 type ABitOfEverythingServer interface {
 	examples.ABitOfEverythingServiceServer
 	examples.StreamServiceServer
@@ -41,6 +44,7 @@ func newABitOfEverythingServer() ABitOfEverythingServer {
 	}
 }
 
+// Create 创建
 func (s *_ABitOfEverythingServer) Create(ctx context.Context, msg *examples.ABitOfEverything) (*examples.ABitOfEverything, error) {
 	s.m.Lock()
 	defer s.m.Unlock()
@@ -59,10 +63,12 @@ func (s *_ABitOfEverythingServer) Create(ctx context.Context, msg *examples.ABit
 	return s.v[uuid], nil
 }
 
+// CreateBody 创建
 func (s *_ABitOfEverythingServer) CreateBody(ctx context.Context, msg *examples.ABitOfEverything) (*examples.ABitOfEverything, error) {
 	return s.Create(ctx, msg)
 }
 
+// BulkCreate 创建
 func (s *_ABitOfEverythingServer) BulkCreate(stream examples.StreamService_BulkCreateServer) error {
 	ctx := stream.Context()
 
@@ -102,6 +108,7 @@ func (s *_ABitOfEverythingServer) BulkCreate(stream examples.StreamService_BulkC
 	return stream.SendAndClose(new(empty.Empty))
 }
 
+// Lookup 检查
 func (s *_ABitOfEverythingServer) Lookup(ctx context.Context, msg *sub2.IdMessage) (*examples.ABitOfEverything, error) {
 	s.m.Lock()
 	defer s.m.Unlock()
@@ -125,6 +132,7 @@ func (s *_ABitOfEverythingServer) Lookup(ctx context.Context, msg *sub2.IdMessag
 	return nil, status.Errorf(codes.NotFound, "not found")
 }
 
+// List 列表
 func (s *_ABitOfEverythingServer) List(_ *empty.Empty, stream examples.StreamService_ListServer) error {
 	s.m.Lock()
 	defer s.m.Unlock()
@@ -155,6 +163,7 @@ func (s *_ABitOfEverythingServer) List(_ *empty.Empty, stream examples.StreamSer
 	return nil
 }
 
+// Update 更新
 func (s *_ABitOfEverythingServer) Update(ctx context.Context, msg *examples.ABitOfEverything) (*empty.Empty, error) {
 	s.m.Lock()
 	defer s.m.Unlock()
@@ -168,6 +177,7 @@ func (s *_ABitOfEverythingServer) Update(ctx context.Context, msg *examples.ABit
 	return new(empty.Empty), nil
 }
 
+// UpdateV2 更新
 func (s *_ABitOfEverythingServer) UpdateV2(ctx context.Context, msg *examples.UpdateV2Request) (*empty.Empty, error) {
 	glog.Info(msg)
 	// If there is no update mask do a regular update
@@ -185,6 +195,7 @@ func (s *_ABitOfEverythingServer) UpdateV2(ctx context.Context, msg *examples.Up
 	return new(empty.Empty), nil
 }
 
+// Delete 删除
 func (s *_ABitOfEverythingServer) Delete(ctx context.Context, msg *sub2.IdMessage) (*empty.Empty, error) {
 	s.m.Lock()
 	defer s.m.Unlock()
@@ -198,6 +209,7 @@ func (s *_ABitOfEverythingServer) Delete(ctx context.Context, msg *sub2.IdMessag
 	return new(empty.Empty), nil
 }
 
+// GetQuery 获取
 func (s *_ABitOfEverythingServer) GetQuery(ctx context.Context, msg *examples.ABitOfEverything) (*empty.Empty, error) {
 	s.m.Lock()
 	defer s.m.Unlock()
@@ -211,6 +223,7 @@ func (s *_ABitOfEverythingServer) GetQuery(ctx context.Context, msg *examples.AB
 	return new(empty.Empty), nil
 }
 
+// GetRepeatedQuery 获取
 func (s *_ABitOfEverythingServer) GetRepeatedQuery(ctx context.Context, msg *examples.ABitOfEverythingRepeated) (*examples.ABitOfEverythingRepeated, error) {
 	s.m.Lock()
 	defer s.m.Unlock()
@@ -219,6 +232,7 @@ func (s *_ABitOfEverythingServer) GetRepeatedQuery(ctx context.Context, msg *exa
 	return msg, nil
 }
 
+// Echo 回应
 func (s *_ABitOfEverythingServer) Echo(ctx context.Context, msg *sub.StringMessage) (*sub.StringMessage, error) {
 	s.m.Lock()
 	defer s.m.Unlock()
@@ -227,6 +241,7 @@ func (s *_ABitOfEverythingServer) Echo(ctx context.Context, msg *sub.StringMessa
 	return msg, nil
 }
 
+// BulkEcho 回应
 func (s *_ABitOfEverythingServer) BulkEcho(stream examples.StreamService_BulkEchoServer) error {
 	var msgs []*sub.StringMessage
 	for {
@@ -262,6 +277,7 @@ func (s *_ABitOfEverythingServer) BulkEcho(stream examples.StreamService_BulkEch
 	return nil
 }
 
+// DeepPathEcho 回应
 func (s *_ABitOfEverythingServer) DeepPathEcho(ctx context.Context, msg *examples.ABitOfEverything) (*examples.ABitOfEverything, error) {
 	s.m.Lock()
 	defer s.m.Unlock()
@@ -270,10 +286,12 @@ func (s *_ABitOfEverythingServer) DeepPathEcho(ctx context.Context, msg *example
 	return msg, nil
 }
 
+// NoBindings no bindings
 func (s *_ABitOfEverythingServer) NoBindings(ctx context.Context, msg *duration.Duration) (*empty.Empty, error) {
 	return nil, nil
 }
 
+// Timeout 超时
 func (s *_ABitOfEverythingServer) Timeout(ctx context.Context, msg *empty.Empty) (*empty.Empty, error) {
 	select {
 	case <-ctx.Done():
@@ -281,6 +299,7 @@ func (s *_ABitOfEverythingServer) Timeout(ctx context.Context, msg *empty.Empty)
 	}
 }
 
+// ErrorWithDetails 错误
 func (s *_ABitOfEverythingServer) ErrorWithDetails(ctx context.Context, msg *empty.Empty) (*empty.Empty, error) {
 	stat, err := status.New(codes.Unknown, "with details").
 		WithDetails(proto.Message(
@@ -295,22 +314,27 @@ func (s *_ABitOfEverythingServer) ErrorWithDetails(ctx context.Context, msg *emp
 	return nil, stat.Err()
 }
 
+// GetMessageWithBody 获取
 func (s *_ABitOfEverythingServer) GetMessageWithBody(ctx context.Context, msg *examples.MessageWithBody) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
+// PostWithEmptyBody post
 func (s *_ABitOfEverythingServer) PostWithEmptyBody(ctx context.Context, msg *examples.Body) (*empty.Empty, error) {
 	return &empty.Empty{}, nil
 }
 
+// CheckGetQueryParams check
 func (s *_ABitOfEverythingServer) CheckGetQueryParams(ctx context.Context, msg *examples.ABitOfEverything) (*examples.ABitOfEverything, error) {
 	return msg, nil
 }
 
+// CheckNestedEnumGetQueryParams check
 func (s *_ABitOfEverythingServer) CheckNestedEnumGetQueryParams(ctx context.Context, msg *examples.ABitOfEverything) (*examples.ABitOfEverything, error) {
 	return msg, nil
 }
 
+// CheckPostQueryParams check
 func (s *_ABitOfEverythingServer) CheckPostQueryParams(ctx context.Context, msg *examples.ABitOfEverything) (*examples.ABitOfEverything, error) {
 	return msg, nil
 }

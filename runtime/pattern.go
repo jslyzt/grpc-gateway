@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/grpc-ecosystem/grpc-gateway/utilities"
+	"github.com/jslyzt/grpc-gateway/utilities"
 	"google.golang.org/grpc/grpclog"
 )
 
@@ -23,21 +23,13 @@ type op struct {
 
 // Pattern is a template pattern of http request paths defined in github.com/googleapis/googleapis/google/api/http.proto.
 type Pattern struct {
-	// ops is a list of operations
-	ops []op
-	// pool is a constant pool indexed by the operands or vars.
-	pool []string
-	// vars is a list of variables names to be bound by this pattern
-	vars []string
-	// stacksize is the max depth of the stack
-	stacksize int
-	// tailLen is the length of the fixed-size segments after a deep wildcard
-	tailLen int
-	// verb is the VERB part of the path pattern. It is empty if the pattern does not have VERB part.
-	verb string
-	// assumeColonVerb indicates whether a path suffix after a final
-	// colon may only be interpreted as a verb.
-	assumeColonVerb bool
+	ops             []op     // ops is a list of operations
+	pool            []string // pool is a constant pool indexed by the operands or vars
+	vars            []string // vars is a list of variables names to be bound by this pattern
+	stacksize       int      // stacksize is the max depth of the stack
+	tailLen         int      // tailLen is the length of the fixed-size segments after a deep wildcard
+	verb            string   // verb is the VERB part of the path pattern. It is empty if the pattern does not have VERB part
+	assumeColonVerb bool     // assumeColonVerb indicates whether a path suffix after a final colon may only be interpreted as a verb
 }
 
 type patternOptions struct {
@@ -223,7 +215,9 @@ func (p Pattern) Match(components []string, verb string) (map[string]string, err
 }
 
 // Verb returns the verb part of the Pattern.
-func (p Pattern) Verb() string { return p.verb }
+func (p Pattern) Verb() string {
+	return p.verb
+}
 
 func (p Pattern) String() string {
 	var stack []string

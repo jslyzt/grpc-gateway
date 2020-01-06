@@ -1,7 +1,3 @@
-/*
-Command example-grpc-server is an example grpc server
-to be called by example-gateway-server.
-*/
 package main
 
 import (
@@ -9,7 +5,7 @@ import (
 	"flag"
 
 	"github.com/golang/glog"
-	"github.com/grpc-ecosystem/grpc-gateway/examples/server"
+	"github.com/jslyzt/grpc-gateway/examples/server"
 )
 
 var (

@@ -212,7 +212,6 @@ type termType string
 
 // These constants define some of valid values of termType.
 // They improve readability of parse functions.
-//
 // You can also use "/", "*", "**", "." or "=" as valid values.
 const (
 	typeIdent   = termType("ident")

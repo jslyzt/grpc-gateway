@@ -7,20 +7,19 @@ import (
 	"github.com/golang/glog"
 	"github.com/golang/protobuf/proto"
 	descriptor "github.com/golang/protobuf/protoc-gen-go/descriptor"
-	"github.com/grpc-ecosystem/grpc-gateway/protoc-gen-grpc-gateway/httprule"
+	"github.com/jslyzt/grpc-gateway/protoc-gen-grpc-gateway/httprule"
 	options "google.golang.org/genproto/googleapis/api/annotations"
 )
 
 // loadServices registers services and their methods from "targetFile" to "r".
-// It must be called after loadFile is called for all files so that loadServices
-// can resolve names of message types and their fields.
+// It must be called after loadFile is called for all files so that loadServices can resolve names of message types and their fields.
 func (r *Registry) loadServices(file *File) error {
 	glog.V(1).Infof("Loading services from %s", file.GetName())
 	var svcs []*Service
 	for _, sd := range file.GetService() {
 		glog.V(2).Infof("Registering %s", sd.GetName())
 		svc := &Service{
-			File: file,
+			File:                   file,
 			ServiceDescriptorProto: sd,
 		}
 		for _, md := range sd.GetMethod() {
@@ -256,8 +255,7 @@ func (r *Registry) newResponse(meth *Method, path string) (*Body, error) {
 	return &Body{FieldPath: FieldPath(fields)}, nil
 }
 
-// lookupField looks up a field named "name" within "msg".
-// It returns nil if no such field found.
+// lookupField looks up a field named "name" within "msg". It returns nil if no such field found.
 func lookupField(msg *Message, name string) *Field {
 	for _, f := range msg.Fields {
 		if f.GetName() == name {

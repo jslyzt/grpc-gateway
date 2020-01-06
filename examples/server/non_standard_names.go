@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/golang/glog"
-	examples "github.com/grpc-ecosystem/grpc-gateway/examples/proto/examplepb"
+	examples "github.com/jslyzt/grpc-gateway/examples/proto/examplepb"
 )
 
 // Implements NonStandardServiceServer
@@ -15,11 +15,13 @@ func newNonStandardServer() examples.NonStandardServiceServer {
 	return new(nonStandardServer)
 }
 
+// Update 更新
 func (s *nonStandardServer) Update(ctx context.Context, msg *examples.NonStandardUpdateRequest) (*examples.NonStandardMessage, error) {
 	glog.Info(msg)
 
 	newMsg := &examples.NonStandardMessage{
-		Thing: &examples.NonStandardMessage_Thing{SubThing: &examples.NonStandardMessage_Thing_SubThing{}}, // The fieldmask_helper doesn't generate nested structs if they are nil
+		// The fieldmask_helper doesn't generate nested structs if they are nil
+		Thing: &examples.NonStandardMessage_Thing{SubThing: &examples.NonStandardMessage_Thing_SubThing{}},
 	}
 	applyFieldMask(newMsg, msg.Body, msg.UpdateMask)
 
@@ -27,11 +29,13 @@ func (s *nonStandardServer) Update(ctx context.Context, msg *examples.NonStandar
 	return newMsg, nil
 }
 
+// UpdateWithJSONNames 更新
 func (s *nonStandardServer) UpdateWithJSONNames(ctx context.Context, msg *examples.NonStandardWithJSONNamesUpdateRequest) (*examples.NonStandardMessageWithJSONNames, error) {
 	glog.Info(msg)
 
 	newMsg := &examples.NonStandardMessageWithJSONNames{
-		Thing: &examples.NonStandardMessageWithJSONNames_Thing{SubThing: &examples.NonStandardMessageWithJSONNames_Thing_SubThing{}}, // The fieldmask_helper doesn't generate nested structs if they are nil
+		// The fieldmask_helper doesn't generate nested structs if they are nil
+		Thing: &examples.NonStandardMessageWithJSONNames_Thing{SubThing: &examples.NonStandardMessageWithJSONNames_Thing_SubThing{}},
 	}
 	applyFieldMask(newMsg, msg.Body, msg.UpdateMask)
 

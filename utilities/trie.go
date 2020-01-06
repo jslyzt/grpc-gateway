@@ -6,12 +6,9 @@ import (
 
 // DoubleArray is a Double Array implementation of trie on sequences of strings.
 type DoubleArray struct {
-	// Encoding keeps an encoding from string to int
-	Encoding map[string]int
-	// Base is the base array of Double Array
-	Base []int
-	// Check is the check array of Double Array
-	Check []int
+	Encoding map[string]int // Encoding keeps an encoding from string to int
+	Base     []int          // Base is the base array of Double Array
+	Check    []int          // Check is the check array of Double Array
 }
 
 // NewDoubleArray builds a DoubleArray from a set of sequences of strings.

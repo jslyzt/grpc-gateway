@@ -5,27 +5,29 @@ import (
 	"strings"
 )
 
-type template struct {
-	segments []segment
-	verb     string
-	template string
-}
+type (
+	template struct {
+		segments []segment
+		verb     string
+		template string
+	}
 
-type segment interface {
-	fmt.Stringer
-	compile() (ops []op)
-}
+	segment interface {
+		fmt.Stringer
+		compile() (ops []op)
+	}
 
-type wildcard struct{}
+	wildcard struct{}
 
-type deepWildcard struct{}
+	deepWildcard struct{}
 
-type literal string
+	literal string
 
-type variable struct {
-	path     string
-	segments []segment
-}
+	variable struct {
+		path     string
+		segments []segment
+	}
+)
 
 func (wildcard) String() string {
 	return "*"

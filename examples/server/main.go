@@ -5,12 +5,11 @@ import (
 	"net"
 
 	"github.com/golang/glog"
-	examples "github.com/grpc-ecosystem/grpc-gateway/examples/proto/examplepb"
+	examples "github.com/jslyzt/grpc-gateway/examples/proto/examplepb"
 	"google.golang.org/grpc"
 )
 
-// Run starts the example gRPC service.
-// "network" and "address" are passed to net.Listen.
+// Run starts the example gRPC service. "network" and "address" are passed to net.Listen.
 func Run(ctx context.Context, network, address string) error {
 	l, err := net.Listen(network, address)
 	if err != nil {

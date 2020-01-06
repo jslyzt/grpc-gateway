@@ -1,7 +1,7 @@
 package httprule
 
 import (
-	"github.com/grpc-ecosystem/grpc-gateway/utilities"
+	"github.com/jslyzt/grpc-gateway/utilities"
 )
 
 const (
@@ -10,18 +10,12 @@ const (
 
 // Template is a compiled representation of path templates.
 type Template struct {
-	// Version is the version number of the format.
-	Version int
-	// OpCodes is a sequence of operations.
-	OpCodes []int
-	// Pool is a constant pool
-	Pool []string
-	// Verb is a VERB part in the template.
-	Verb string
-	// Fields is a list of field paths bound in this template.
-	Fields []string
-	// Original template (example: /v1/a_bit_of_everything)
-	Template string
+	Version  int      // the version number of the format.
+	OpCodes  []int    // a sequence of operations.
+	Pool     []string // a constant pool
+	Verb     string   // a VERB part in the template.
+	Fields   []string // a list of field paths bound in this template.
+	Template string   // template (example: /v1/a_bit_of_everything)
 }
 
 // Compiler compiles utilities representation of path templates into marshallable operations.
@@ -31,15 +25,9 @@ type Compiler interface {
 }
 
 type op struct {
-	// code is the opcode of the operation
-	code utilities.OpCode
-
-	// str is a string operand of the code.
-	// num is ignored if str is not empty.
-	str string
-
-	// num is a numeric operand of the code.
-	num int
+	code utilities.OpCode // the opcode of the operation
+	str  string           // a string operand of the code
+	num  int              // a numeric operand of the code
 }
 
 func (w wildcard) compile() []op {

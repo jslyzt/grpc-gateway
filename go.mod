@@ -1,4 +1,4 @@
-module github.com/grpc-ecosystem/grpc-gateway
+module github.com/jslyzt/grpc-gateway
 
 go 1.13
 

@@ -27,8 +27,7 @@ var ErrUnknownURI = status.Error(codes.Unimplemented, http.StatusText(http.Statu
 // ServeMux is a request multiplexer for grpc-gateway.
 // It matches http requests to patterns and invokes the corresponding handler.
 type ServeMux struct {
-	// handlers maps HTTP method to a list of handlers.
-	handlers                  map[string][]handler
+	handlers                  map[string][]handler // handlers maps HTTP method to a list of handlers
 	forwardResponseOptions    []func(context.Context, http.ResponseWriter, proto.Message) error
 	marshalers                marshalerRegistry
 	incomingHeaderMatcher     HeaderMatcherFunc
@@ -72,7 +71,6 @@ func DefaultHeaderMatcher(key string) (string, bool) {
 }
 
 // WithIncomingHeaderMatcher returns a ServeMuxOption representing a headerMatcher for incoming request to gateway.
-//
 // This matcher will be called with each header in http.Request. If matcher returns true, that header will be
 // passed to gRPC context. To transform the header before passing to gRPC context, matcher should return modified header.
 func WithIncomingHeaderMatcher(fn HeaderMatcherFunc) ServeMuxOption {
@@ -82,7 +80,6 @@ func WithIncomingHeaderMatcher(fn HeaderMatcherFunc) ServeMuxOption {
 }
 
 // WithOutgoingHeaderMatcher returns a ServeMuxOption representing a headerMatcher for outgoing response from gateway.
-//
 // This matcher will be called with each header in response header metadata. If matcher returns true, that header will be
 // passed to http response returned from gateway. To transform the header before passing to response,
 // matcher should return modified header.
@@ -93,7 +90,6 @@ func WithOutgoingHeaderMatcher(fn HeaderMatcherFunc) ServeMuxOption {
 }
 
 // WithMetadata returns a ServeMuxOption for passing metadata to a gRPC context.
-//
 // This can be used by services that need to read from http.Request and modify gRPC context. A common use case
 // is reading token from cookie and adding it in gRPC context.
 func WithMetadata(annotator func(context.Context, *http.Request) metadata.MD) ServeMuxOption {
@@ -103,7 +99,6 @@ func WithMetadata(annotator func(context.Context, *http.Request) metadata.MD) Se
 }
 
 // WithProtoErrorHandler returns a ServeMuxOption for passing metadata to a gRPC context.
-//
 // This can be used to handle an error as general proto message defined by gRPC.
 // The response including body and status is not backward compatible with the default error handler.
 // When this option is used, HTTPError and OtherErrorHandler are overwritten on initialization.
@@ -121,9 +116,7 @@ func WithDisablePathLengthFallback() ServeMuxOption {
 }
 
 // WithStreamErrorHandler returns a ServeMuxOption that will use the given custom stream
-// error handler, which allows for customizing the error trailer for server-streaming
-// calls.
-//
+// error handler, which allows for customizing the error trailer for server-streaming calls.
 // For stream errors that occur before any response has been written, the mux's
 // ProtoErrorHandler will be invoked. However, once data has been written, the errors must
 // be handled differently: they must be included in the response body. The response body's

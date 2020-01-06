@@ -9,11 +9,13 @@ import (
 
 	"context"
 	"github.com/golang/protobuf/proto"
-	"github.com/grpc-ecosystem/grpc-gateway/internal"
+	"github.com/jslyzt/grpc-gateway/internal"
 	"google.golang.org/grpc/grpclog"
 )
 
-var errEmptyResponse = errors.New("empty response")
+var (
+	errEmptyResponse = errors.New("empty response")
+)
 
 // ForwardResponseStream forwards the stream from gRPC server to REST client.
 func ForwardResponseStream(ctx context.Context, mux *ServeMux, marshaler Marshaler, w http.ResponseWriter, req *http.Request, recv func() (proto.Message, error), opts ...func(context.Context, http.ResponseWriter, proto.Message) error) {
@@ -193,8 +195,7 @@ func streamChunk(ctx context.Context, result proto.Message, errHandler StreamErr
 	return map[string]proto.Message{"result": result}
 }
 
-// streamError returns the payload for the final message in a response stream
-// that represents the given err.
+// streamError returns the payload for the final message in a response stream that represents the given err.
 func streamError(ctx context.Context, errHandler StreamErrorHandlerFunc, err error) *StreamError {
 	serr := errHandler(ctx, err)
 	if serr != nil {

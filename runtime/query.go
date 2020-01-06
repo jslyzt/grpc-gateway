@@ -11,11 +11,13 @@ import (
 	"time"
 
 	"github.com/golang/protobuf/proto"
-	"github.com/grpc-ecosystem/grpc-gateway/utilities"
+	"github.com/jslyzt/grpc-gateway/utilities"
 	"google.golang.org/grpc/grpclog"
 )
 
-var valuesKeyRegexp = regexp.MustCompile("^(.*)\\[(.*)\\]$")
+var (
+	valuesKeyRegexp = regexp.MustCompile("^(.*)\\[(.*)\\]$")
+)
 
 // PopulateQueryParameters populates "values" into "msg".
 // A value is ignored if its key starts with one of the elements in "filter".

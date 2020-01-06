@@ -3,7 +3,7 @@ package server
 import (
 	"context"
 
-	examples "github.com/grpc-ecosystem/grpc-gateway/examples/proto/examplepb"
+	examples "github.com/jslyzt/grpc-gateway/examples/proto/examplepb"
 )
 
 // Implements of ResponseBodyServiceServer
@@ -14,6 +14,7 @@ func newResponseBodyServer() examples.ResponseBodyServiceServer {
 	return new(responseBodyServer)
 }
 
+// GetResponseBody 获取
 func (s *responseBodyServer) GetResponseBody(ctx context.Context, req *examples.ResponseBodyIn) (*examples.ResponseBodyOut, error) {
 	return &examples.ResponseBodyOut{
 		Response: &examples.ResponseBodyOut_Response{
@@ -22,6 +23,7 @@ func (s *responseBodyServer) GetResponseBody(ctx context.Context, req *examples.
 	}, nil
 }
 
+// ListResponseBodies 列表
 func (s *responseBodyServer) ListResponseBodies(ctx context.Context, req *examples.ResponseBodyIn) (*examples.RepeatedResponseBodyOut, error) {
 	return &examples.RepeatedResponseBodyOut{
 		Response: []*examples.RepeatedResponseBodyOut_Response{
@@ -32,6 +34,7 @@ func (s *responseBodyServer) ListResponseBodies(ctx context.Context, req *exampl
 	}, nil
 }
 
+// ListResponseStrings 列表
 func (s *responseBodyServer) ListResponseStrings(ctx context.Context, req *examples.ResponseBodyIn) (*examples.RepeatedResponseStrings, error) {
 	if req.Data == "empty" {
 		return &examples.RepeatedResponseStrings{

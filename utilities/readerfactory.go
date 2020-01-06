@@ -6,8 +6,7 @@ import (
 	"io/ioutil"
 )
 
-// IOReaderFactory takes in an io.Reader and returns a function that will allow you to create a new reader that begins
-// at the start of the stream
+// IOReaderFactory takes in an io.Reader and returns a function
 func IOReaderFactory(r io.Reader) (func() io.Reader, error) {
 	b, err := ioutil.ReadAll(r)
 	if err != nil {

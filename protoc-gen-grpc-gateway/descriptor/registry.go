@@ -14,67 +14,47 @@ import (
 
 // Registry is a registry of information extracted from plugin.CodeGeneratorRequest.
 type Registry struct {
-	// msgs is a mapping from fully-qualified message name to descriptor
-	msgs map[string]*Message
+	msgs map[string]*Message // mapping from fully-qualified message name to descriptor
 
-	// enums is a mapping from fully-qualified enum name to descriptor
-	enums map[string]*Enum
+	enums map[string]*Enum // mapping from fully-qualified enum name to descriptor
 
-	// files is a mapping from file path to descriptor
-	files map[string]*File
+	files map[string]*File // mapping from file path to descriptor
 
-	// prefix is a prefix to be inserted to golang package paths generated from proto package names.
-	prefix string
+	prefix string // be inserted to golang package paths generated from proto package names
 
-	// importPath is used as the package if no input files declare go_package. If it contains slashes, everything up to the rightmost slash is ignored.
-	importPath string
+	importPath string // used as the package if no input files declare go_package. If it contains slashes, everything up to the rightmost slash is ignored
 
-	// pkgMap is a user-specified mapping from file path to proto package.
-	pkgMap map[string]string
+	pkgMap map[string]string // user-specified mapping from file path to proto package
 
-	// pkgAliases is a mapping from package aliases to package paths in go which are already taken.
-	pkgAliases map[string]string
+	pkgAliases map[string]string // mapping from package aliases to package paths in go which are already taken
 
-	// allowDeleteBody permits http delete methods to have a body
-	allowDeleteBody bool
+	allowDeleteBody bool // permits http delete methods to have a body
 
-	// externalHttpRules is a mapping from fully qualified service method names to additional HttpRules applicable besides the ones found in annotations.
-	externalHTTPRules map[string][]*annotations.HttpRule
+	externalHTTPRules map[string][]*annotations.HttpRule // mapping from fully qualified service method names to additional HttpRules applicable besides the ones found in annotations.
 
-	// allowMerge generation one swagger file out of multiple protos
-	allowMerge bool
+	allowMerge bool // generation one swagger file out of multiple protos
 
-	// mergeFileName target swagger file name after merge
-	mergeFileName string
+	mergeFileName string // target swagger file name after merge
 
-	// allowRepeatedFieldsInBody permits repeated field in body field path of `google.api.http` annotation option
-	allowRepeatedFieldsInBody bool
+	allowRepeatedFieldsInBody bool // permits repeated field in body field path of `google.api.http` annotation option
 
-	// includePackageInTags controls whether the package name defined in the `package` directive
 	// in the proto file can be prepended to the gRPC service name in the `Tags` field of every operation.
-	includePackageInTags bool
+	includePackageInTags bool // controls whether the package name defined in the `package` directive
 
-	// repeatedPathParamSeparator specifies how path parameter repeated fields are separated
-	repeatedPathParamSeparator repeatedFieldSeparator
+	repeatedPathParamSeparator repeatedFieldSeparator // specifies how path parameter repeated fields are separated
 
-	// useJSONNamesForFields if true json tag name is used for generating fields in swagger definitions,
+	useJSONNamesForFields bool // if true json tag name is used for generating fields in swagger definitions,
 	// otherwise the original proto name is used. It's helpful for synchronizing the swagger definition
 	// with grpc-gateway response, if it uses json tags for marshaling.
-	useJSONNamesForFields bool
 
-	// useFQNForSwaggerName if true swagger names will use the full qualified name (FQN) from proto definition,
+	useFQNForSwaggerName bool // if true swagger names will use the full qualified name (FQN) from proto definition,
 	// and generate a dot-separated swagger name concatenating all elements from the proto FQN.
 	// If false, the default behavior is to concat the last 2 elements of the FQN if they are unique, otherwise concat
 	// all the elements of the FQN without any separator
-	useFQNForSwaggerName bool
 
-	// allowColonFinalSegments determines whether colons are permitted
-	// in the final segment of a path.
-	allowColonFinalSegments bool
+	allowColonFinalSegments bool // determines whether colons are permitted in the final segment of a path
 
-	// useGoTemplate determines whether you want to use GO templates
-	// in your protofile comments
-	useGoTemplate bool
+	useGoTemplate bool // determines whether you want to use GO templates in your protofile comments
 }
 
 type repeatedFieldSeparator struct {
@@ -193,8 +173,7 @@ func (r *Registry) registerEnum(file *File, outerPath []string, enums []*descrip
 	}
 }
 
-// LookupMsg looks up a message type by "name".
-// It tries to resolve "name" from "location" if "name" is a relative message name.
+// LookupMsg looks up a message type by "name". It tries to resolve "name" from "location" if "name" is a relative message name
 func (r *Registry) LookupMsg(location, name string) (*Message, error) {
 	glog.V(1).Infof("lookup %s from %s", name, location)
 	if strings.HasPrefix(name, ".") {
@@ -219,8 +198,7 @@ func (r *Registry) LookupMsg(location, name string) (*Message, error) {
 	return nil, fmt.Errorf("no message found: %s", name)
 }
 
-// LookupEnum looks up a enum type by "name".
-// It tries to resolve "name" from "location" if "name" is a relative enum name.
+// LookupEnum looks up a enum type by "name". It tries to resolve "name" from "location" if "name" is a relative enum name
 func (r *Registry) LookupEnum(location, name string) (*Enum, error) {
 	glog.V(1).Infof("lookup enum %s from %s", name, location)
 	if strings.HasPrefix(name, ".") {
@@ -275,8 +253,7 @@ func (r *Registry) SetPrefix(prefix string) {
 }
 
 // SetImportPath registers the importPath which is used as the package if no
-// input files declare go_package. If it contains slashes, everything up to the
-// rightmost slash is ignored.
+// input files declare go_package. If it contains slashes, everything up to the rightmost slash is ignored.
 func (r *Registry) SetImportPath(importPath string) {
 	r.importPath = importPath
 }
@@ -335,8 +312,7 @@ func (r *Registry) GetAllFQENs() []string {
 	return keys
 }
 
-// SetAllowDeleteBody controls whether http delete methods may have a
-// body or fail loading if encountered.
+// SetAllowDeleteBody controls whether http delete methods may have a body or fail loading if encountered.
 func (r *Registry) SetAllowDeleteBody(allow bool) {
 	r.allowDeleteBody = allow
 }
@@ -380,20 +356,17 @@ func (r *Registry) IsIncludePackageInTags() bool {
 	return r.includePackageInTags
 }
 
-// GetRepeatedPathParamSeparator returns a rune spcifying how
-// path parameter repeated fields are separated.
+// GetRepeatedPathParamSeparator returns a rune spcifying how path parameter repeated fields are separated
 func (r *Registry) GetRepeatedPathParamSeparator() rune {
 	return r.repeatedPathParamSeparator.sep
 }
 
-// GetRepeatedPathParamSeparatorName returns the name path parameter repeated
-// fields repeatedFieldSeparator. I.e. 'csv', 'pipe', 'ssv' or 'tsv'
+// GetRepeatedPathParamSeparatorName returns the name path parameter repeated fields repeatedFieldSeparator. I.e. 'csv', 'pipe', 'ssv' or 'tsv'
 func (r *Registry) GetRepeatedPathParamSeparatorName() string {
 	return r.repeatedPathParamSeparator.name
 }
 
-// SetRepeatedPathParamSeparator sets how path parameter repeated fields are
-// separated. Allowed names are 'csv', 'pipe', 'ssv' and 'tsv'.
+// SetRepeatedPathParamSeparator sets how path parameter repeated fields are separated. Allowed names are 'csv', 'pipe', 'ssv' and 'tsv'
 func (r *Registry) SetRepeatedPathParamSeparator(name string) error {
 	var sep rune
 	switch name {
@@ -460,8 +433,7 @@ func (r *Registry) GetUseGoTemplate() bool {
 	return r.useGoTemplate
 }
 
-// sanitizePackageName replaces unallowed character in package name
-// with allowed character.
+// sanitizePackageName replaces unallowed character in package name with allowed character.
 func sanitizePackageName(pkgName string) string {
 	pkgName = strings.Replace(pkgName, ".", "_", -1)
 	pkgName = strings.Replace(pkgName, "-", "_", -1)
@@ -476,8 +448,7 @@ func (r *Registry) defaultGoPackageName(f *descriptor.FileDescriptorProto) strin
 }
 
 // packageIdentityName returns the identity of packages.
-// protoc-gen-grpc-gateway rejects CodeGenerationRequests which contains more than one packages
-// as protoc-gen-go does.
+// protoc-gen-grpc-gateway rejects CodeGenerationRequests which contains more than one packages as protoc-gen-go does.
 func (r *Registry) packageIdentityName(f *descriptor.FileDescriptorProto) string {
 	if f.Options != nil && f.Options.GoPackage != nil {
 		gopkg := f.Options.GetGoPackage()
@@ -487,8 +458,7 @@ func (r *Registry) packageIdentityName(f *descriptor.FileDescriptorProto) string
 		}
 
 		gopkg = gopkg[idx+1:]
-		// package name is overrided with the string after the
-		// ';' character
+		// package name is overrided with the string after the ';' character
 		sc := strings.IndexByte(gopkg, ';')
 		if sc < 0 {
 			return sanitizePackageName(gopkg)
