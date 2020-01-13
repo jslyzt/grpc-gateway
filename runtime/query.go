@@ -41,9 +41,12 @@ func PopulateQueryParameters(msg proto.Message, values url.Values, filter *utili
 
 // PopulateFieldFromPath sets a value in a nested Protobuf structure.
 // It instantiates missing protobuf fields as it goes.
-func PopulateFieldFromPath(msg proto.Message, fieldPathString string, value string) error {
-	fieldPath := strings.Split(fieldPathString, ".")
-	return populateFieldValueFromPath(msg, fieldPath, []string{value})
+func PopulateFieldFromPath(msg proto.Message, params Params, field string) error {
+	val, err := params.String(field)
+	if err != nil {
+		return err
+	}
+	return populateFieldValueFromPath(msg, strings.Split(field, "."), []string{val})
 }
 
 func populateFieldValueFromPath(msg proto.Message, fieldPath []string, values []string) error {

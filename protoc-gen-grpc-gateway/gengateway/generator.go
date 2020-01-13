@@ -43,6 +43,8 @@ func New(reg *descriptor.Registry, useRequestContext bool, registerFuncSuffix, p
 		"io",
 		"net/http",
 		"github.com/jslyzt/grpc-gateway/runtime",
+		"github.com/jslyzt/grpc-gateway/runtime/template/request",
+		"github.com/jslyzt/grpc-gateway/runtime/template/register",
 		"github.com/jslyzt/grpc-gateway/utilities",
 		"github.com/golang/protobuf/descriptor",
 		"github.com/golang/protobuf/proto",

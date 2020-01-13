@@ -205,6 +205,20 @@ func Timestamp(val string) (*timestamp.Timestamp, error) {
 	return &r, nil
 }
 
+// TimestampSlice converts 'val' where individual integers are separated by 'sep' into a uint32 slice.
+func TimestampSlice(val, sep string) ([]*timestamp.Timestamp, error) {
+	s := strings.Split(val, sep)
+	values := make([]*timestamp.Timestamp, len(s))
+	for i, v := range s {
+		value, err := Timestamp(v)
+		if err != nil {
+			return values, err
+		}
+		values[i] = value
+	}
+	return values, nil
+}
+
 // Duration converts the given string into a timestamp.Duration.
 func Duration(val string) (*duration.Duration, error) {
 	var r duration.Duration
@@ -213,6 +227,20 @@ func Duration(val string) (*duration.Duration, error) {
 		return nil, err
 	}
 	return &r, nil
+}
+
+// DurationSlice converts 'val' where individual integers are separated by 'sep' into a uint32 slice.
+func DurationSlice(val, sep string) ([]*duration.Duration, error) {
+	s := strings.Split(val, sep)
+	values := make([]*duration.Duration, len(s))
+	for i, v := range s {
+		value, err := Duration(v)
+		if err != nil {
+			return values, err
+		}
+		values[i] = value
+	}
+	return values, nil
 }
 
 // Enum converts the given string into an int32 that should be type casted into the correct enum proto type.
